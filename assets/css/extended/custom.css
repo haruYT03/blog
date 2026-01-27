@@ -134,3 +134,22 @@ body {
     border-top: 1px dashed #ddd; /* 点線で控えめに */
     margin: 3rem 0;
 }
+
+
+/* 1. サイト最上部のヘッダー（Blogロゴとダークモードボタン）を消す */
+header.header {
+    display: none !important;
+}
+
+/* 2. 日付を小さく、ボタンと同じくらいの高さにする */
+.log-date {
+    font-size: 1rem;       /* 文字サイズを本文と同じくらい（16px程度）に */
+    font-weight: normal;   /* 太字を解除（お好みで bold のままでもOK） */
+    line-height: 1;        /* 行の高さを詰める */
+    vertical-align: middle; /* 横のボタンと高さを合わせる */
+}
+
+/* ついでに全体の余白調整（ヘッダーが消えた分、上が詰まりすぎるのを防ぐ） */
+.main {
+    margin-top: 30px; /* 上に少し空間をあける */
+}
