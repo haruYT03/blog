@@ -77,4 +77,60 @@ body {
     margin-bottom: 1.5em; /* 本文との間隔 */
 }
 
+/* --- 生ログ仕様のデザイン --- */
+
+/* 全体の幅 */
+.log-container {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+/* 各記事のブロック */
+.log-entry {
+    margin-bottom: 3rem;
+    /* ここに余計な装飾（枠線や影）がないのでプニプニしません */
+}
+
+/* メタデータ（日付とボタン） */
+.log-meta {
+    font-family: monospace; /* 日付っぽく等幅フォントで */
+    color: #888;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.log-date {
+    font-weight: bold;
+}
+
+/* コピーボタン */
+.copy-link-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #aaa;
+    margin-left: 10px;
+    padding: 0;
+}
+.copy-link-btn:hover {
+    color: #333;
+}
+
+/* 本文 */
+.log-content {
+    line-height: 1.8;
+    font-size: 1rem;
+}
+.log-content h2 {
+    font-size: 1.2rem;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+/* 記事ごとの区切り線 */
+.log-divider {
+    border: 0;
+    border-top: 1px dashed #ddd; /* 点線で控えめに */
+    margin: 3rem 0;
 }

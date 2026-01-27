@@ -1,62 +1,50 @@
 {{- define "main" }}
 
-{{- if (and site.Params.profileMode.enabled .IsHome) }}
-{{- partial "index_profile.html" . }}
-{{- else }}
-
-{{- /* ヘッダー（Blogというタイトル部分） */ -}}
-{{- if not .IsHome | and .Title }}
+{{- if .Title }}
 <header class="page-header">
-  {{- partial "breadcrumbs.html" . }}
   <h1>{{ .Title }}</h1>
 </header>
 {{- end }}
 
-{{- /* ホーム画面のメインループ */ -}}
 {{- $pages := union .RegularPages .Sections }}
 {{- if .IsHome }}
 {{- $pages = where site.RegularPages "Type" "in" site.Params.mainSections }}
 {{- end }}
 {{- $paginator := .Paginate $pages }}
 
-{{- range $index, $page := $paginator.Pages }}
+<div class="log-container">
+{{- range $paginator.Pages }}
 
-<article class="post-entry" id="{{ .File.TranslationBaseName }}">
-  
-  <header class="entry-header">
-    <h2>
-      {{ .Title }}
-      {{- if .Draft }}<span class="entry-hint" title="Draft">(Draft)</span>{{- end }}
-    </h2>
-  </header>
-
-  <div class="entry-content">
-    {{ .Content }}
-  </div>
-
-  <footer class="entry-footer">
-    {{- partial "post_meta.html" . -}}
+  <div class="log-entry" id="{{ .File.TranslationBaseName }}">
     
-    <button class="copy-link-btn" onclick="copyAnchor('{{ .File.TranslationBaseName }}')" title="Copy Link">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-      </svg>
-    </button>
-  </footer>
+    <div class="log-meta">
+      <span class="log-date">{{ .Date.Format "2006-01-02" }}</span>
+      <button class="copy-link-btn" onclick="copyAnchor('{{ .File.TranslationBaseName }}')" title="Copy Link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+      </button>
+    </div>
 
-</article>
+    <div class="log-content">
+      {{ .Content }}
+    </div>
+
+  </div>
+  
+  <hr class="log-divider">
+
 {{- end }}
-
-{{- /* ページネーション（記事が増えたときの「次へ」ボタン） */ -}}
+</div>
 {{- if gt $paginator.TotalPages 1 }}
 <footer class="page-footer">
   <nav class="pagination">
     {{- if $paginator.HasPrev }}
-    <a class="prev" href="{{ $paginator.Prev.URL | absURL }}">« {{ i18n "prev_page" }}</a>
+    <a class="prev" href="{{ $paginator.Prev.URL | absURL }}">« 前へ</a>
     {{- end }}
     {{- if $paginator.HasNext }}
-    <a class="next" href="{{ $paginator.Next.URL | absURL }}">{{ i18n "next_page" }} »</a>
+    <a class="next" href="{{ $paginator.Next.URL | absURL }}">次へ »</a>
     {{- end }}
   </nav>
 </footer>
@@ -71,5 +59,4 @@ function copyAnchor(id) {
 }
 </script>
 
-{{- end }}
 {{- end }}
