@@ -15,7 +15,7 @@
     <div class="tag-dropdown">
       {{ range $name, $taxonomy := .Site.Taxonomies.tags }}
       <a href="{{ "/tags/" | relLangURL }}{{ $name | urlize }}" class="tag-item">
-        #{{ $name }} <span class="tag-count">({{ $taxonomy.Count }})</span>
+        {{ $name }} <span class="tag-count">({{ $taxonomy.Count }})</span>
       </a>
       {{ end }}
     </div>
@@ -33,7 +33,7 @@
       {{ if .Params.tags }}
       <span class="log-tags">
         {{ range .Params.tags }}
-        <a href="{{ "tags/" | absLangURL }}{{ . | urlize }}">#{{ . }}</a>
+        <a href="{{ "tags/" | absLangURL }}{{ . | urlize }}">{{ . }}</a>
         {{ end }}
       </span>
       {{ end }}

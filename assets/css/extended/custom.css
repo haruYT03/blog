@@ -174,21 +174,26 @@ body {
 
 /* --- タグのデザイン --- */
 .log-tags {
-    margin-left: 10px; /* 日付との隙間 */
-    font-size: 0.9rem;
+    margin-left: 10px;
+    font-size: 0.8rem; /* 0.9remから小さくしました */
+    
+    /* 位置調整：1mm(約3px)下げる */
+    position: relative;
+    top: 3px; 
 }
 
 .log-tags a {
-    color: #999;        /* 薄いグレー */
+    color: #bbb;        /* #がない分、少し薄くして上品に */
     text-decoration: none;
-    margin-right: 5px;  /* タグ同士の隙間 */
+    margin-right: 8px;  /* 記号が減った分、間隔を少し広げました */
     transition: color 0.2s;
 }
 
 .log-tags a:hover {
-    color: #000;        /* カーソルを乗せたら黒く */
+    color: #333;
     text-decoration: underline;
 }
+
 /* --- 右上のタグメニュー --- */
 
 /* 配置エリア（記事の幅720pxの右端に合わせる） */
