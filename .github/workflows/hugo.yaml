@@ -59,9 +59,6 @@ jobs:
         with:
           path: ./public
 
-pagination:
-  pagerSize: 100
-
   # Deployment job
   deploy:
     environment:
@@ -73,3 +70,6 @@ pagination:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+
+paginate: 300
