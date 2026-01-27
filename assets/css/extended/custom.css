@@ -153,8 +153,8 @@ header.header {
 .main {
     margin-top: 30px; /* 上に少し空間をあける */
 }
-.log-content h2 {
-    margin-bottom: 2rem; /* 文字サイズの2倍くらいの余白を空ける */
+.log-content h3 {
+    margin-bottom: 1rem; /* 文字サイズの2倍くらいの余白を空ける */
     /* 必要なら border-bottom: 1px solid #ddd; とか書くと下線も引けます */
 }
 
