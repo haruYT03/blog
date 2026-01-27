@@ -171,3 +171,85 @@ body {
     /* 日付が少し小さく見えるかもしれないので微調整 */
     font-weight: 700; /* 少し太くして存在感を出す */
 }
+
+/* --- タグのデザイン --- */
+.log-tags {
+    margin-left: 10px; /* 日付との隙間 */
+    font-size: 0.9rem;
+}
+
+.log-tags a {
+    color: #999;        /* 薄いグレー */
+    text-decoration: none;
+    margin-right: 5px;  /* タグ同士の隙間 */
+    transition: color 0.2s;
+}
+
+.log-tags a:hover {
+    color: #000;        /* カーソルを乗せたら黒く */
+    text-decoration: underline;
+}
+/* --- 右上のタグメニュー --- */
+
+/* 配置エリア（記事の幅720pxの右端に合わせる） */
+.tag-menu-container {
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: flex-end; /* 右寄せ */
+    position: relative;        /* ドロップダウンの基準点 */
+    margin-bottom: 20px;       /* 記事との間隔 */
+}
+
+/* "Tags" というボタン部分 */
+.tag-summary {
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #999;
+    list-style: none; /* 標準の▼マークを消す */
+    user-select: none;
+    transition: color 0.2s;
+}
+.tag-summary:hover {
+    color: #333;
+}
+/* Chrome等で▼が消えない場合の対策 */
+.tag-summary::-webkit-details-marker {
+    display: none;
+}
+
+/* 開いたときの中身（ドロップダウン） */
+.tag-dropdown {
+    position: absolute;
+    top: 25px; /* Tags文字のすぐ下 */
+    right: 0;
+    background: #fff; /* 背景白 */
+    border: 1px solid #eee;
+    padding: 10px 15px;
+    border-radius: 4px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* うっすら影 */
+    z-index: 100;
+    min-width: 150px;
+    display: flex;
+    flex-direction: column; /* 縦並び */
+    gap: 8px; /* 行間 */
+}
+
+/* タグのリンク */
+.tag-item {
+    font-size: 0.9rem;
+    color: #666;
+    text-decoration: none;
+    display: block;
+}
+.tag-item:hover {
+    color: #000;
+    background-color: #fafafa;
+}
+
+/* 記事数の数字 */
+.tag-count {
+    font-size: 0.8em;
+    color: #bbb;
+    margin-left: 4px;
+}

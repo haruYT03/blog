@@ -9,6 +9,19 @@
 {{- end }}
 {{- $paginator := .Paginate $pages }}
 
+<div class="tag-menu-container">
+  <details class="tag-details">
+    <summary class="tag-summary">Tags</summary>
+    <div class="tag-dropdown">
+      {{ range $name, $taxonomy := .Site.Taxonomies.tags }}
+      <a href="{{ "/tags/" | relLangURL }}{{ $name | urlize }}" class="tag-item">
+        #{{ $name }} <span class="tag-count">({{ $taxonomy.Count }})</span>
+      </a>
+      {{ end }}
+    </div>
+  </details>
+</div>
+
 <div class="log-container">
 {{- range $paginator.Pages }}
 
