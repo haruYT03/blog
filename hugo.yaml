@@ -8,4 +8,5 @@ params:
   ShowShareButtons: true
   ShowReadingTime: true
 
-paginate: 300
+pagination:
+  pagerSize: 300
