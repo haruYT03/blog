@@ -7,3 +7,5 @@ params:
   defaultTheme: light  # 白背景固定
   ShowShareButtons: true
   ShowReadingTime: true
+
+paginate: 300
