@@ -157,3 +157,17 @@ header.header {
     margin-bottom: 2rem; /* 文字サイズの2倍くらいの余白を空ける */
     /* 必要なら border-bottom: 1px solid #ddd; とか書くと下線も引けます */
 }
+
+/* --- Google Fonts 適用 --- */
+
+/* 1. サイト全体（本文・タイトル）を Zen 角ゴシック New に */
+body {
+    font-family: "Zen Kaku Gothic New", sans-serif !important;
+}
+
+/* 2. 日付部分だけ Kaisei Decol に */
+.log-date {
+    font-family: "Kaisei Decol", serif !important;
+    /* 日付が少し小さく見えるかもしれないので微調整 */
+    font-weight: 700; /* 少し太くして存在感を出す */
+}
