@@ -87,6 +87,13 @@
   {{- if not (.Param "hideMeta") }}
   <footer class="entry-footer">
     {{- partial "post_meta.html" . -}}
+
+    <button class="copy-link-btn" onclick="copyAnchor('{{ .File.TranslationBaseName }}')" title="この行へのリンクをコピー">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+      </svg>
+    </button>
   </footer>
   {{- end }}
 </article>
@@ -114,6 +121,19 @@
   </nav>
 </footer>
 {{- end }}
+
+<script>
+  function copyAnchor(id) {
+      // 今のURL + # + 記事ID を結合
+      const url = window.location.origin + window.location.pathname + "#" + id;
+      
+      // クリップボードに書き込む
+      navigator.clipboard.writeText(url).then(() => {
+          // 成功したら少しだけユーザーに教える（アラートが邪魔なら消してください）
+          alert("copied: " + url);
+      });
+  }
+  </script>
 
 {{- end }}{{/* end profileMode */}}
 

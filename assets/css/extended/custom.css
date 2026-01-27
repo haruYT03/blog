@@ -23,4 +23,25 @@ body {
     margin-bottom: 0.5em;
 }
 
-/* --- ここまで --- */
+/* リンクコピーボタンのデザイン */
+.copy-link-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #999; /* 薄いグレー */
+    font-size: 0.9em;
+    margin-left: 10px; /* 日付との距離 */
+    opacity: 0.5; /* さらに透明度を下げて目立たなくする */
+    transition: opacity 0.2s;
+}
+
+/* マウスを乗せたときだけ濃くする */
+.copy-link-btn:hover {
+    opacity: 1;
+    color: #333; /* 黒っぽく */
+}
+/* アイコンの位置調整 */
+.copy-link-btn svg {
+    position: relative;
+    top: 2px; /* 数値を大きくすると下に、小さくすると上に動きます */
+}
