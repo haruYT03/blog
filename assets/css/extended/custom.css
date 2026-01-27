@@ -1,0 +1,26 @@
+/* メインカラーの調整（例：リンクやアクセント色を黒に） */
+:root {
+    --primary: #000;
+}
+
+/* 記事本文のフォント設定 */
+body {
+    /* MacとWindows両方できれいに見えるフォント指定 */
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    color: #333; /* 文字を真っ黒ではなく濃いグレーにして目に優しく */
+    line-height: 1.8; /* 行間を少し広げて読みやすく */
+}
+
+/* 記事幅の調整（読みやすい幅に狭める） */
+.main {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+/* 記事タイトルのフォント調整 */
+.post-title {
+    font-weight: 100;
+    margin-bottom: 0.5em;
+}
+
+/* --- ここまで --- */

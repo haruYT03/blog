@@ -1,0 +1,9 @@
+baseURL: "https://snows.github.io/blog/"
+languageCode: "ja"
+title: "Blog"
+theme: "PaperMod"
+
+params:
+  defaultTheme: light  # 白背景固定
+  ShowShareButtons: true
+  ShowReadingTime: true
