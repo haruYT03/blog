@@ -258,3 +258,16 @@ body {
     color: #bbb;
     margin-left: 4px;
 }
+
+/* --- 本文の改行設定 --- */
+/* 1. 段落（Enter2回）の下に必ず隙間をあける */
+.log-content p {
+    margin-bottom: 1.5rem; /* 1行半くらいのスペース */
+}
+
+/* 2. <br> があっても高さが潰れないようにする保険 */
+.log-content br {
+    display: block;
+    content: "";
+    margin-bottom: 0.5em;
+}

@@ -10,3 +10,8 @@ params:
 
 pagination:
   pagerSize: 300
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true  # ← これでHTMLタグ（<br>など）が使えるようになります
