@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>新しい記事</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Zen Kaku Gothic New", sans-serif;
+      color: #333;
+      background: #fff;
+      padding: 40px 24px;
+      max-width: 720px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 36px;
+    }
+    h1 { font-size: 1rem; font-weight: 400; color: #aaa; }
+    .field { margin-bottom: 24px; }
+    label { display: block; font-size: 0.78rem; color: #bbb; margin-bottom: 6px; }
+    input[type="text"], input[type="date"], input[type="password"] {
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid #eee;
+      padding: 6px 0;
+      font-family: inherit;
+      font-size: 1rem;
+      color: #333;
+      background: transparent;
+      outline: none;
+    }
+    input:focus { border-bottom-color: #333; }
+    textarea {
+      width: 100%;
+      border: 1px solid #eee;
+      border-radius: 4px;
+      padding: 14px;
+      font-family: inherit;
+      font-size: 1rem;
+      color: #333;
+      line-height: 1.8;
+      min-height: 420px;
+      resize: vertical;
+      outline: none;
+    }
+    textarea:focus { border-color: #999; }
+    .row { display: flex; gap: 24px; }
+    .row .field { flex: 1; }
+    .btn {
+      background: #333;
+      color: #fff;
+      border: none;
+      padding: 12px 32px;
+      font-family: inherit;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .btn:hover { background: #000; }
+    .btn:disabled { background: #ccc; cursor: not-allowed; }
+    .btn-ghost {
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: 0.8rem;
+      color: #ccc;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0;
+    }
+    .btn-ghost:hover { color: #999; }
+    .status { margin-top: 16px; font-size: 0.9rem; color: #aaa; min-height: 1.4em; }
+    .status.ok { color: #4a9d6f; }
+    .status.ng { color: #c0392b; }
+    .instructions {
+      background: #f9f9f9;
+      border-radius: 4px;
+      padding: 20px 24px;
+      margin-bottom: 28px;
+      font-size: 0.9rem;
+      color: #555;
+    }
+    .instructions ol { margin: 12px 0 0 20px; }
+    .instructions li { margin-bottom: 6px; }
+    code {
+      background: #eee;
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-size: 0.85rem;
+    }
+    #setup { display: none; }
+    #editor { display: none; }
+    #setup.on { display: block; }
+    #editor.on { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- 初期設定画面 -->
+<div id="setup">
+  <h1 style="margin-bottom:28px">初期設定</h1>
+  <div class="instructions">
+    <strong>GitHubのアクセストークンを取得してください。</strong>
+    <ol>
+      <li>GitHubにログイン → <strong>Settings → Developer settings → Personal access tokens → Fine-grained tokens</strong></li>
+      <li>「Generate new token」を押す</li>
+      <li>Repository access で <code>haruYT03/blog</code> だけを選択</li>
+      <li>Permissions → Contents を <strong>Read and write</strong> に設定</li>
+      <li>生成されたトークンをコピーして下に貼り付ける</li>
+    </ol>
+  </div>
+  <div class="field">
+    <label>アクセストークン</label>
+    <input type="password" id="token-input" placeholder="github_pat_...">
+  </div>
+  <button class="btn" onclick="saveToken()">保存して始める</button>
+</div>
+
+<!-- 記事編集画面 -->
+<div id="editor">
+  <div class="header">
+    <h1>新しい記事</h1>
+    <button class="btn-ghost" onclick="showSetup()">トークンを変更</button>
+  </div>
+
+  <div class="row">
+    <div class="field">
+      <label>日付</label>
+      <input type="date" id="date">
+    </div>
+    <div class="field">
+      <label>ファイル名</label>
+      <input type="text" id="filename" placeholder="260607">
+    </div>
+  </div>
+
+  <div class="field">
+    <label>タグ（カンマ区切り）</label>
+    <input type="text" id="tags" placeholder="ゲーム, 買い物">
+  </div>
+
+  <div class="field">
+    <label>本文</label>
+    <textarea id="content" placeholder="ここに書く"></textarea>
+  </div>
+
+  <button class="btn" id="submit-btn" onclick="submit()">投稿する</button>
+  <div id="status" class="status"></div>
+</div>
+
+<script>
+  const OWNER = 'haruYT03';
+  const REPO  = 'blog';
+
+  function toBase64(str) {
+    const bytes = new TextEncoder().encode(str);
+    let bin = '';
+    bytes.forEach(b => bin += String.fromCharCode(b));
+    return btoa(bin);
+  }
+
+  function today() {
+    const d = new Date();
+    return [d.getFullYear(), String(d.getMonth()+1).padStart(2,'0'), String(d.getDate()).padStart(2,'0')].join('-');
+  }
+
+  function filenameFromDate(s) {
+    return s.replace(/-/g, '').slice(2); // YYYY-MM-DD → YYMMDD
+  }
+
+  function isoDate(s) {
+    return `${s}T00:00:00+09:00`;
+  }
+
+  function showSetup() {
+    document.getElementById('setup').classList.add('on');
+    document.getElementById('editor').classList.remove('on');
+  }
+
+  function showEditor() {
+    document.getElementById('setup').classList.remove('on');
+    document.getElementById('editor').classList.add('on');
+  }
+
+  function saveToken() {
+    const t = document.getElementById('token-input').value.trim();
+    if (!t) return;
+    localStorage.setItem('gh_token', t);
+    showEditor();
+  }
+
+  function setStatus(msg, cls) {
+    const el = document.getElementById('status');
+    el.textContent = msg;
+    el.className = 'status ' + (cls || '');
+  }
+
+  async function submit() {
+    const token    = localStorage.getItem('gh_token');
+    const dateVal  = document.getElementById('date').value;
+    const filename = document.getElementById('filename').value.trim();
+    const tagStr   = document.getElementById('tags').value;
+    const body     = document.getElementById('content').value;
+
+    if (!filename || !body.trim()) {
+      setStatus('ファイル名と本文は必須です', 'ng');
+      return;
+    }
+
+    const tags = tagStr ? tagStr.split(',').map(t => t.trim()).filter(Boolean) : [];
+    const tagsLine = tags.length ? `tags: [${tags.map(t => `"${t}"`).join(', ')}]\n` : '';
+    const markdown = `---\ndate: '${isoDate(dateVal)}'\ndraft: false\ntitle: ''\n${tagsLine}---\n${body}`;
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    setStatus('投稿中...');
+
+    try {
+      const res = await fetch(
+        `https://api.github.com/repos/${OWNER}/${REPO}/contents/content/posts/${filename}.md`,
+        {
+          method: 'PUT',
+          headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: `add post ${filename}`, content: toBase64(markdown), branch: 'main' }),
+        }
+      );
+
+      if (res.ok) {
+        setStatus('投稿しました。数分でサイトに反映されます ✓', 'ok');
+        document.getElementById('content').value = '';
+        document.getElementById('tags').value = '';
+        const t = today();
+        document.getElementById('date').value = t;
+        document.getElementById('filename').value = filenameFromDate(t);
+      } else {
+        const err = await res.json();
+        if (res.status === 422) setStatus('同名のファイルが既に存在します。ファイル名を変えてください。', 'ng');
+        else if (res.status === 401) setStatus('トークンが無効です。再設定してください。', 'ng');
+        else setStatus(`エラー: ${err.message}`, 'ng');
+      }
+    } catch(e) {
+      setStatus(`通信エラー: ${e.message}`, 'ng');
+    }
+
+    btn.disabled = false;
+  }
+
+  // 起動
+  const t = today();
+  document.getElementById('date').value = t;
+  document.getElementById('filename').value = filenameFromDate(t);
+  document.getElementById('date').addEventListener('change', e => {
+    document.getElementById('filename').value = filenameFromDate(e.target.value);
+  });
+
+  localStorage.getItem('gh_token') ? showEditor() : showSetup();
+</script>
+</body>
+</html>
