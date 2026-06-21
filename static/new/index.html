@@ -17,109 +17,52 @@
       margin: 0 auto;
       line-height: 1.8;
     }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 28px;
-    }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
     h1 { font-size: 1rem; font-weight: 400; color: #aaa; }
-    .tabs {
-      display: flex;
-      gap: 0;
-      margin-bottom: 32px;
-      border-bottom: 1px solid #eee;
-    }
+    .tabs { display: flex; margin-bottom: 32px; border-bottom: 1px solid #eee; }
     .tab {
-      background: none;
-      border: none;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -1px;
-      padding: 8px 20px;
-      font-family: inherit;
-      font-size: 0.9rem;
-      color: #bbb;
-      cursor: pointer;
+      background: none; border: none; border-bottom: 2px solid transparent;
+      margin-bottom: -1px; padding: 8px 20px;
+      font-family: inherit; font-size: 0.9rem; color: #bbb; cursor: pointer;
     }
     .tab.active { color: #333; border-bottom-color: #333; }
     .field { margin-bottom: 24px; }
     label { display: block; font-size: 0.78rem; color: #bbb; margin-bottom: 6px; }
     input[type="text"], input[type="date"], input[type="password"] {
-      width: 100%;
-      border: none;
-      border-bottom: 1px solid #eee;
-      padding: 6px 0;
-      font-family: inherit;
-      font-size: 1rem;
-      color: #333;
-      background: transparent;
-      outline: none;
+      width: 100%; border: none; border-bottom: 1px solid #eee;
+      padding: 6px 0; font-family: inherit; font-size: 1rem;
+      color: #333; background: transparent; outline: none;
     }
     input[readonly] { color: #aaa; }
     input:focus { border-bottom-color: #333; }
     select {
-      width: 100%;
-      border: none;
-      border-bottom: 1px solid #eee;
-      padding: 6px 0;
-      font-family: inherit;
-      font-size: 1rem;
-      color: #333;
-      background: transparent;
-      outline: none;
-      cursor: pointer;
+      width: 100%; border: none; border-bottom: 1px solid #eee;
+      padding: 6px 0; font-family: inherit; font-size: 1rem;
+      color: #333; background: transparent; outline: none; cursor: pointer;
     }
-    select:focus { border-bottom-color: #333; }
     textarea {
-      width: 100%;
-      border: 1px solid #eee;
-      border-radius: 4px;
-      padding: 14px;
-      font-family: inherit;
-      font-size: 1rem;
-      color: #333;
-      line-height: 1.8;
-      min-height: 420px;
-      resize: vertical;
-      outline: none;
+      width: 100%; border: 1px solid #eee; border-radius: 4px;
+      padding: 14px; font-family: inherit; font-size: 1rem;
+      color: #333; line-height: 1.8; min-height: 420px; resize: vertical; outline: none;
     }
     textarea:focus { border-color: #999; }
     .row { display: flex; gap: 24px; }
     .row .field { flex: 1; }
     .btn {
-      background: #333;
-      color: #fff;
-      border: none;
-      padding: 12px 32px;
-      font-family: inherit;
-      font-size: 1rem;
-      cursor: pointer;
-      border-radius: 4px;
+      background: #333; color: #fff; border: none;
+      padding: 12px 32px; font-family: inherit; font-size: 1rem; cursor: pointer; border-radius: 4px;
     }
     .btn:hover { background: #000; }
     .btn:disabled { background: #ccc; cursor: not-allowed; }
     .btn-ghost {
-      background: none;
-      border: none;
-      font-family: inherit;
-      font-size: 0.8rem;
-      color: #ccc;
-      cursor: pointer;
-      text-decoration: underline;
-      padding: 0;
+      background: none; border: none; font-family: inherit;
+      font-size: 0.8rem; color: #ccc; cursor: pointer; text-decoration: underline; padding: 0;
     }
     .btn-ghost:hover { color: #999; }
     .status { margin-top: 16px; font-size: 0.9rem; color: #aaa; min-height: 1.4em; transition: opacity 0.4s; }
     .status.ok { color: #4a9d6f; }
     .status.ng { color: #c0392b; }
-    .instructions {
-      background: #f9f9f9;
-      border-radius: 4px;
-      padding: 20px 24px;
-      margin-bottom: 28px;
-      font-size: 0.9rem;
-      color: #555;
-    }
+    .instructions { background: #f9f9f9; border-radius: 4px; padding: 20px 24px; margin-bottom: 28px; font-size: 0.9rem; color: #555; }
     .instructions ol { margin: 12px 0 0 20px; }
     .instructions li { margin-bottom: 6px; }
     code { background: #eee; padding: 1px 6px; border-radius: 3px; font-size: 0.85rem; }
@@ -130,54 +73,50 @@
     #edit-selector { display: none; }
     #edit-selector.on { display: block; }
 
-    /* 本文ラベルの行（Zenボタン付き） */
-    .content-label-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 6px;
-    }
-    .content-label-row label { margin-bottom: 0; }
-    .zen-toggle {
-      background: none;
-      border: 1px solid #eee;
-      border-radius: 4px;
-      font-family: inherit;
-      font-size: 0.75rem;
-      color: #aaa;
-      padding: 3px 12px;
-      cursor: pointer;
-    }
-    .zen-toggle:hover { color: #333; border-color: #ccc; }
-
-    /* チートシート */
-    .cheatsheet { margin-bottom: 24px; }
-    .cheatsheet summary {
-      cursor: pointer;
-      font-size: 0.8rem;
-      color: #bbb;
-      list-style: none;
-      user-select: none;
-    }
-    .cheatsheet summary::-webkit-details-marker { display: none; }
-    .cheatsheet summary:hover { color: #333; }
-    .cheatsheet[open] summary { color: #999; margin-bottom: 12px; }
-    .cheatsheet table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-    .cheatsheet td { padding: 7px 10px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
-    .cheatsheet td:first-child { color: #888; white-space: nowrap; width: 1%; }
-    .cheatsheet td code { display: inline-block; }
-
     /* この記事を見るリンク */
-    #view-link {
-      display: none;
-      font-size: 0.85rem;
-      color: #999;
-      text-decoration: none;
-      margin-top: -10px;
-      margin-bottom: 24px;
-    }
+    #view-link { display: none; font-size: 0.85rem; color: #999; text-decoration: none; margin-top: -10px; margin-bottom: 24px; }
     #view-link.on { display: inline-block; }
     #view-link:hover { color: #333; }
+
+    /* テキストエリア上部ツールバー */
+    .textarea-toolbar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      position: relative;
+    }
+    .tool-btn {
+      background: none; border: 1px solid #eee; border-radius: 4px;
+      font-family: inherit; font-size: 0.75rem; color: #bbb;
+      padding: 3px 10px; cursor: pointer; line-height: 1.6;
+    }
+    .tool-btn:hover { color: #333; border-color: #ccc; }
+
+    /* チートシート（ドロップダウン） */
+    .cs-details { position: relative; }
+    .cs-details summary { list-style: none; }
+    .cs-details summary::-webkit-details-marker { display: none; }
+    .cs-panel {
+      display: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 6px;
+      padding: 14px 16px;
+      z-index: 100;
+      min-width: 340px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+    }
+    .cs-details[open] .cs-panel { display: block; }
+    .cs-panel table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .cs-panel td { padding: 6px 8px; border-bottom: 1px solid #f4f4f4; vertical-align: top; }
+    .cs-panel td:first-child { color: #aaa; white-space: nowrap; width: 1%; padding-right: 14px; }
+    .cs-panel tr:last-child td { border-bottom: none; }
+    .cs-section { font-size: 0.72rem; color: #ccc; padding: 10px 8px 2px; letter-spacing: 0.05em; }
 
     /* Zen モード */
     .editor-wrap.zen {
@@ -185,35 +124,19 @@
       inset: 0;
       z-index: 200;
       background: #fff;
-      padding: 56px max(24px, calc((100vw - 760px) / 2)) 40px;
-      display: flex;
+      padding: 48px max(24px, calc((100vw - 760px) / 2)) 40px;
     }
+    .editor-wrap.zen .textarea-toolbar { display: none; }
     .editor-wrap.zen textarea {
       width: 100%;
-      height: 100%;
+      height: calc(100vh - 88px);
       min-height: 0;
       border: none;
-      font-size: 1.08rem;
+      font-size: 1.05rem;
       padding: 0;
+      resize: none;
     }
-    .editor-wrap.zen textarea:focus { border: none; }
-    .zen-exit {
-      display: none;
-      position: fixed;
-      top: 16px;
-      right: 24px;
-      z-index: 201;
-      background: none;
-      border: 1px solid #eee;
-      border-radius: 4px;
-      font-family: inherit;
-      font-size: 0.8rem;
-      color: #aaa;
-      padding: 5px 16px;
-      cursor: pointer;
-    }
-    .editor-wrap.zen .zen-exit { display: block; }
-    .zen-exit:hover { color: #333; }
+    .editor-wrap.zen textarea:focus { border: none; outline: none; }
   </style>
 </head>
 <body>
@@ -250,7 +173,6 @@
     <button class="tab" id="tab-edit" onclick="setMode('edit')">編集</button>
   </div>
 
-  <!-- 編集モード：記事選択 -->
   <div id="edit-selector">
     <div class="field">
       <label>記事を選択</label>
@@ -278,27 +200,27 @@
 
   <a id="view-link" href="#" target="_blank" rel="noopener">公開ページでこの記事を見る →</a>
 
-  <!-- チートシート -->
-  <details class="cheatsheet">
-    <summary>Markdown チートシート</summary>
-    <table>
-      <tr><td><code>**太字**</code></td><td><strong>太字</strong> になる</td></tr>
-      <tr><td><code>## 見出し</code></td><td>大きい見出し（<code>###</code> で中くらい）</td></tr>
-      <tr><td><code>[文字](URL)</code></td><td>リンク</td></tr>
-      <tr><td><code>![](画像URL)</code></td><td>画像。Gyazoは「<strong>画像URLをコピー</strong>」で得た <code>https://i.gyazo.com/◯◯.png</code> を貼る（ページURLではない点に注意）</td></tr>
-      <tr><td>改行</td><td>行末に半角スペース2つ、または空行で段落を分ける</td></tr>
-    </table>
-  </details>
-
   <div class="editor-wrap" id="editor-wrap">
-    <button class="zen-exit" onclick="toggleZen()">閉じる (Esc)</button>
-    <div style="width:100%">
-      <div class="content-label-row">
-        <label>本文</label>
-        <button type="button" class="zen-toggle" onclick="toggleZen()">Zen モード</button>
-      </div>
-      <textarea id="content" placeholder="ここに書く"></textarea>
+    <div class="textarea-toolbar">
+      <details class="cs-details" id="cs-details">
+        <summary class="tool-btn">?</summary>
+        <div class="cs-panel">
+          <table>
+            <tr><td colspan="2" class="cs-section">テキスト</td></tr>
+            <tr><td><code>**太字**</code></td><td><strong>太字</strong></td></tr>
+            <tr><td><code>## 見出し</code></td><td>大きい見出し（<code>###</code> で中）</td></tr>
+            <tr><td><code>[文字](URL)</code></td><td>リンク</td></tr>
+            <tr><td colspan="2" class="cs-section">画像</td></tr>
+            <tr><td><code>![](URL)</code></td><td>画像を表示。GyazoはURLをコピーで得た <code>https://i.gyazo.com/…</code> を使う</td></tr>
+            <tr><td colspan="2" class="cs-section">改行</td></tr>
+            <tr><td>空行を1行</td><td>段落が変わる（間が広がる）</td></tr>
+            <tr><td>行末スペース2つ</td><td>段落は変えずに改行だけ</td></tr>
+          </table>
+        </div>
+      </details>
+      <button type="button" class="tool-btn" onclick="toggleZen()">Zen</button>
     </div>
+    <textarea id="content" placeholder="ここに書く"></textarea>
   </div>
 
   <button class="btn" id="submit-btn" onclick="submit()" style="margin-top:24px">投稿する</button>
@@ -312,8 +234,6 @@
   let mode = 'new';
   let currentSHA = null;
   let statusTimer = null;
-
-  // --- ユーティリティ ---
 
   function toBase64(str) {
     const bytes = new TextEncoder().encode(str);
@@ -334,35 +254,25 @@
     return [d.getFullYear(), String(d.getMonth()+1).padStart(2,'0'), String(d.getDate()).padStart(2,'0')].join('-');
   }
 
-  function filenameFromDate(s) {
-    return s.replace(/-/g, '').slice(2);
-  }
-
-  function isoDate(s) {
-    return `${s}T00:00:00+09:00`;
-  }
+  function filenameFromDate(s) { return s.replace(/-/g, '').slice(2); }
+  function isoDate(s) { return `${s}T00:00:00+09:00`; }
 
   function parseDateFromFilename(name) {
     const m = name.match(/^(\d{2})(\d{2})(\d{2})$/);
-    if (m) return `20${m[1]}-${m[2]}-${m[3]}`;
-    return null;
+    return m ? `20${m[1]}-${m[2]}-${m[3]}` : null;
   }
 
   function parseFrontmatter(raw) {
     const m = raw.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
     if (!m) return { date: '', tags: [], body: raw };
-    const yaml = m[1];
-    const body = m[2];
+    const yaml = m[1], body = m[2];
     const dateMatch = yaml.match(/date: '([^']+)'/);
     const tagsMatch = yaml.match(/tags: \[([^\]]*)\]/);
     const date = dateMatch ? dateMatch[1].slice(0, 10) : '';
-    const tags = tagsMatch
-      ? tagsMatch[1].split(',').map(t => t.trim().replace(/"/g, '')).filter(Boolean)
-      : [];
+    const tags = tagsMatch ? tagsMatch[1].split(',').map(t => t.trim().replace(/"/g, '')).filter(Boolean) : [];
     return { date, tags, body };
   }
 
-  // autoHideMs を渡すとその時間後にメッセージが消える
   function setStatus(msg, cls, autoHideMs) {
     const el = document.getElementById('status');
     clearTimeout(statusTimer);
@@ -385,12 +295,9 @@
     });
   }
 
-  // 公開ページ（ブログのルート）のURLを組み立てる。/blog/new/ → /blog/#filename
   function postUrl(filename) {
     return new URL('../', location.href).href + '#' + filename;
   }
-
-  // --- 画面切り替え ---
 
   function showSetup() {
     document.getElementById('setup').classList.add('on');
@@ -422,7 +329,6 @@
   async function setMode(m) {
     mode = m;
     currentSHA = null;
-
     document.getElementById('tab-new').classList.toggle('active', m === 'new');
     document.getElementById('tab-edit').classList.toggle('active', m === 'edit');
     document.getElementById('edit-selector').classList.toggle('on', m === 'edit');
@@ -431,12 +337,8 @@
     document.getElementById('filename').readOnly = m === 'edit';
     updateViewLink(null);
     setStatus('', '');
-
-    if (m === 'new') {
-      resetForm();
-    } else {
-      await fetchPostList();
-    }
+    if (m === 'new') resetForm();
+    else await fetchPostList();
   }
 
   function resetForm() {
@@ -447,30 +349,20 @@
     document.getElementById('content').value = '';
   }
 
-  // --- 記事一覧取得 ---
-
   async function fetchPostList() {
     const select = document.getElementById('post-select');
     select.innerHTML = '<option value="">-- 読み込み中... --</option>';
-
     const res = await ghFetch('contents/content/posts');
     if (!res.ok) { setStatus('一覧の取得に失敗しました', 'ng'); return; }
-
     const files = await res.json();
     const mds = files
       .filter(f => f.name.endsWith('.md'))
-      .map(f => {
-        const name = f.name.replace('.md', '');
-        const date = parseDateFromFilename(name);
-        return { name, path: f.path, date };
-      })
+      .map(f => { const name = f.name.replace('.md', ''); return { name, path: f.path, date: parseDateFromFilename(name) }; })
       .sort((a, b) => {
         if (a.date && b.date) return b.date.localeCompare(a.date);
-        if (a.date) return -1;
-        if (b.date) return 1;
+        if (a.date) return -1; if (b.date) return 1;
         return a.name.localeCompare(b.name);
       });
-
     select.innerHTML = '<option value="">-- 選択してください --</option>';
     mds.forEach(f => {
       const opt = document.createElement('option');
@@ -480,76 +372,49 @@
     });
   }
 
-  // --- 記事読み込み ---
-
   async function loadPost() {
     const path = document.getElementById('post-select').value;
     if (!path) { updateViewLink(null); return; }
-
     setStatus('読み込み中...', '');
-
     const res = await ghFetch(`contents/${path}`);
     if (!res.ok) { setStatus('読み込みに失敗しました', 'ng'); return; }
-
     const data = await res.json();
     currentSHA = data.sha;
-
     const raw = fromBase64(data.content);
     const { date, tags, body } = parseFrontmatter(raw);
     const filename = path.split('/').pop().replace('.md', '');
-
     document.getElementById('date').value = date || today();
     document.getElementById('filename').value = filename;
     document.getElementById('tags').value = tags.join(', ');
     document.getElementById('content').value = body;
-
     updateViewLink(filename);
     setStatus('読み込みました', 'ok', 3000);
   }
-
-  // --- 投稿・更新 ---
 
   async function submit() {
     const dateVal  = document.getElementById('date').value;
     const filename = document.getElementById('filename').value.trim();
     const tagStr   = document.getElementById('tags').value;
     const body     = document.getElementById('content').value;
-
-    if (!filename || !body.trim()) {
-      setStatus('ファイル名と本文は必須です', 'ng');
-      return;
-    }
-
+    if (!filename || !body.trim()) { setStatus('ファイル名と本文は必須です', 'ng'); return; }
     const tags = tagStr ? tagStr.split(',').map(t => t.trim()).filter(Boolean) : [];
     const tagsLine = tags.length ? `tags: [${tags.map(t => `"${t}"`).join(', ')}]\n` : '';
     const markdown = `---\ndate: '${isoDate(dateVal)}'\ndraft: false\ntitle: ''\n${tagsLine}---\n${body}`;
-
     const btn = document.getElementById('submit-btn');
     btn.disabled = true;
     setStatus(mode === 'new' ? '投稿中...' : '更新中...');
-
     const payload = {
       message: mode === 'new' ? `add post ${filename}` : `update post ${filename}`,
       content: toBase64(markdown),
       branch: 'main',
     };
     if (mode === 'edit' && currentSHA) payload.sha = currentSHA;
-
     try {
-      const res = await ghFetch(
-        `contents/content/posts/${filename}.md`,
-        { method: 'PUT', body: JSON.stringify(payload) }
-      );
-
+      const res = await ghFetch(`contents/content/posts/${filename}.md`, { method: 'PUT', body: JSON.stringify(payload) });
       if (res.ok) {
         const data = await res.json();
         currentSHA = data.content?.sha || currentSHA;
-        setStatus(
-          mode === 'new'
-            ? '投稿しました。数分でサイトに反映されます ✓'
-            : '更新しました。数分でサイトに反映されます ✓',
-          'ok'
-        );
+        setStatus(mode === 'new' ? '投稿しました。数分でサイトに反映されます ✓' : '更新しました。数分でサイトに反映されます ✓', 'ok');
         if (mode === 'new') resetForm();
       } else {
         const err = await res.json();
@@ -557,29 +422,25 @@
         else if (res.status === 401) setStatus('トークンが無効です。再設定してください。', 'ng');
         else setStatus(`エラー: ${err.message}`, 'ng');
       }
-    } catch(e) {
-      setStatus(`通信エラー: ${e.message}`, 'ng');
-    }
-
+    } catch(e) { setStatus(`通信エラー: ${e.message}`, 'ng'); }
     btn.disabled = false;
   }
-
-  // --- Zen モード ---
 
   function toggleZen() {
     const wrap = document.getElementById('editor-wrap');
     const on = wrap.classList.toggle('zen');
-    if (on) document.getElementById('content').focus();
+    if (on) {
+      document.getElementById('content').focus();
+      // チートシートが開いていたら閉じる
+      document.getElementById('cs-details').removeAttribute('open');
+    }
   }
 
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && document.getElementById('editor-wrap').classList.contains('zen')) {
-      toggleZen();
-    }
+    if (e.key === 'Escape' && document.getElementById('editor-wrap').classList.contains('zen')) toggleZen();
   });
 
-  // --- 起動 ---
-
+  // 起動
   const t = today();
   document.getElementById('date').value = t;
   document.getElementById('filename').value = filenameFromDate(t);
