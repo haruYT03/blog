@@ -21,9 +21,27 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 36px;
+      margin-bottom: 28px;
     }
     h1 { font-size: 1rem; font-weight: 400; color: #aaa; }
+    .tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 32px;
+      border-bottom: 1px solid #eee;
+    }
+    .tab {
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      padding: 8px 20px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      color: #bbb;
+      cursor: pointer;
+    }
+    .tab.active { color: #333; border-bottom-color: #333; }
     .field { margin-bottom: 24px; }
     label { display: block; font-size: 0.78rem; color: #bbb; margin-bottom: 6px; }
     input[type="text"], input[type="date"], input[type="password"] {
@@ -37,7 +55,21 @@
       background: transparent;
       outline: none;
     }
+    input[readonly] { color: #aaa; }
     input:focus { border-bottom-color: #333; }
+    select {
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid #eee;
+      padding: 6px 0;
+      font-family: inherit;
+      font-size: 1rem;
+      color: #333;
+      background: transparent;
+      outline: none;
+      cursor: pointer;
+    }
+    select:focus { border-bottom-color: #333; }
     textarea {
       width: 100%;
       border: 1px solid #eee;
@@ -90,16 +122,13 @@
     }
     .instructions ol { margin: 12px 0 0 20px; }
     .instructions li { margin-bottom: 6px; }
-    code {
-      background: #eee;
-      padding: 1px 6px;
-      border-radius: 3px;
-      font-size: 0.85rem;
-    }
+    code { background: #eee; padding: 1px 6px; border-radius: 3px; font-size: 0.85rem; }
     #setup { display: none; }
     #editor { display: none; }
     #setup.on { display: block; }
     #editor.on { display: block; }
+    #edit-selector { display: none; }
+    #edit-selector.on { display: block; }
   </style>
 </head>
 <body>
@@ -127,8 +156,23 @@
 <!-- 記事編集画面 -->
 <div id="editor">
   <div class="header">
-    <h1>新しい記事</h1>
+    <h1 id="page-title">新しい記事</h1>
     <button class="btn-ghost" onclick="showSetup()">トークンを変更</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" id="tab-new" onclick="setMode('new')">新規</button>
+    <button class="tab" id="tab-edit" onclick="setMode('edit')">編集</button>
+  </div>
+
+  <!-- 編集モード：記事選択 -->
+  <div id="edit-selector">
+    <div class="field">
+      <label>記事を選択</label>
+      <select id="post-select" onchange="loadPost()">
+        <option value="">-- 読み込み中... --</option>
+      </select>
+    </div>
   </div>
 
   <div class="row">
@@ -160,11 +204,23 @@
   const OWNER = 'haruYT03';
   const REPO  = 'blog';
 
+  let mode = 'new';
+  let currentSHA = null;
+
+  // --- ユーティリティ ---
+
   function toBase64(str) {
     const bytes = new TextEncoder().encode(str);
     let bin = '';
     bytes.forEach(b => bin += String.fromCharCode(b));
     return btoa(bin);
+  }
+
+  function fromBase64(b64) {
+    const binary = atob(b64.replace(/\n/g, ''));
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
   }
 
   function today() {
@@ -173,12 +229,49 @@
   }
 
   function filenameFromDate(s) {
-    return s.replace(/-/g, '').slice(2); // YYYY-MM-DD → YYMMDD
+    return s.replace(/-/g, '').slice(2);
   }
 
   function isoDate(s) {
     return `${s}T00:00:00+09:00`;
   }
+
+  // YYMMDD → "2026-01-28" に変換、失敗したらnull
+  function parseDateFromFilename(name) {
+    const m = name.match(/^(\d{2})(\d{2})(\d{2})$/);
+    if (m) return `20${m[1]}-${m[2]}-${m[3]}`;
+    return null;
+  }
+
+  function parseFrontmatter(raw) {
+    const m = raw.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
+    if (!m) return { date: '', tags: [], body: raw };
+    const yaml = m[1];
+    const body = m[2];
+    const dateMatch = yaml.match(/date: '([^']+)'/);
+    const tagsMatch = yaml.match(/tags: \[([^\]]*)\]/);
+    const date = dateMatch ? dateMatch[1].slice(0, 10) : '';
+    const tags = tagsMatch
+      ? tagsMatch[1].split(',').map(t => t.trim().replace(/"/g, '')).filter(Boolean)
+      : [];
+    return { date, tags, body };
+  }
+
+  function setStatus(msg, cls) {
+    const el = document.getElementById('status');
+    el.textContent = msg;
+    el.className = 'status ' + (cls || '');
+  }
+
+  function ghFetch(path, opts = {}) {
+    const token = localStorage.getItem('gh_token');
+    return fetch(`https://api.github.com/repos/${OWNER}/${REPO}/${path}`, {
+      ...opts,
+      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json', ...(opts.headers || {}) },
+    });
+  }
+
+  // --- 画面切り替え ---
 
   function showSetup() {
     document.getElementById('setup').classList.add('on');
@@ -197,14 +290,96 @@
     showEditor();
   }
 
-  function setStatus(msg, cls) {
-    const el = document.getElementById('status');
-    el.textContent = msg;
-    el.className = 'status ' + (cls || '');
+  async function setMode(m) {
+    mode = m;
+    currentSHA = null;
+
+    document.getElementById('tab-new').classList.toggle('active', m === 'new');
+    document.getElementById('tab-edit').classList.toggle('active', m === 'edit');
+    document.getElementById('edit-selector').classList.toggle('on', m === 'edit');
+    document.getElementById('page-title').textContent = m === 'new' ? '新しい記事' : '記事を編集';
+    document.getElementById('submit-btn').textContent = m === 'new' ? '投稿する' : '更新する';
+    document.getElementById('filename').readOnly = m === 'edit';
+    setStatus('', '');
+
+    if (m === 'new') {
+      resetForm();
+    } else {
+      await fetchPostList();
+    }
   }
 
+  function resetForm() {
+    const t = today();
+    document.getElementById('date').value = t;
+    document.getElementById('filename').value = filenameFromDate(t);
+    document.getElementById('tags').value = '';
+    document.getElementById('content').value = '';
+  }
+
+  // --- 記事一覧取得 ---
+
+  async function fetchPostList() {
+    const select = document.getElementById('post-select');
+    select.innerHTML = '<option value="">-- 読み込み中... --</option>';
+
+    const res = await ghFetch('contents/content/posts');
+    if (!res.ok) { setStatus('一覧の取得に失敗しました', 'ng'); return; }
+
+    const files = await res.json();
+    const mds = files
+      .filter(f => f.name.endsWith('.md'))
+      .map(f => {
+        const name = f.name.replace('.md', '');
+        const date = parseDateFromFilename(name);
+        return { name, path: f.path, date };
+      })
+      .sort((a, b) => {
+        // 日付ファイルは新しい順、それ以外は後ろに
+        if (a.date && b.date) return b.date.localeCompare(a.date);
+        if (a.date) return -1;
+        if (b.date) return 1;
+        return a.name.localeCompare(b.name);
+      });
+
+    select.innerHTML = '<option value="">-- 選択してください --</option>';
+    mds.forEach(f => {
+      const opt = document.createElement('option');
+      opt.value = f.path;
+      opt.textContent = f.date ? `${f.date}　${f.name}` : f.name;
+      select.appendChild(opt);
+    });
+  }
+
+  // --- 記事読み込み ---
+
+  async function loadPost() {
+    const path = document.getElementById('post-select').value;
+    if (!path) return;
+
+    setStatus('読み込み中...', '');
+
+    const res = await ghFetch(`contents/${path}`);
+    if (!res.ok) { setStatus('読み込みに失敗しました', 'ng'); return; }
+
+    const data = await res.json();
+    currentSHA = data.sha;
+
+    const raw = fromBase64(data.content);
+    const { date, tags, body } = parseFrontmatter(raw);
+    const filename = path.split('/').pop().replace('.md', '');
+
+    document.getElementById('date').value = date || today();
+    document.getElementById('filename').value = filename;
+    document.getElementById('tags').value = tags.join(', ');
+    document.getElementById('content').value = body;
+
+    setStatus('読み込みました', 'ok');
+  }
+
+  // --- 投稿・更新 ---
+
   async function submit() {
-    const token    = localStorage.getItem('gh_token');
     const dateVal  = document.getElementById('date').value;
     const filename = document.getElementById('filename').value.trim();
     const tagStr   = document.getElementById('tags').value;
@@ -221,25 +396,31 @@
 
     const btn = document.getElementById('submit-btn');
     btn.disabled = true;
-    setStatus('投稿中...');
+    setStatus(mode === 'new' ? '投稿中...' : '更新中...');
+
+    const payload = {
+      message: mode === 'new' ? `add post ${filename}` : `update post ${filename}`,
+      content: toBase64(markdown),
+      branch: 'main',
+    };
+    if (mode === 'edit' && currentSHA) payload.sha = currentSHA;
 
     try {
-      const res = await fetch(
-        `https://api.github.com/repos/${OWNER}/${REPO}/contents/content/posts/${filename}.md`,
-        {
-          method: 'PUT',
-          headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: `add post ${filename}`, content: toBase64(markdown), branch: 'main' }),
-        }
+      const res = await ghFetch(
+        `contents/content/posts/${filename}.md`,
+        { method: 'PUT', body: JSON.stringify(payload) }
       );
 
       if (res.ok) {
-        setStatus('投稿しました。数分でサイトに反映されます ✓', 'ok');
-        document.getElementById('content').value = '';
-        document.getElementById('tags').value = '';
-        const t = today();
-        document.getElementById('date').value = t;
-        document.getElementById('filename').value = filenameFromDate(t);
+        const data = await res.json();
+        currentSHA = data.content?.sha || currentSHA;
+        setStatus(
+          mode === 'new'
+            ? '投稿しました。数分でサイトに反映されます ✓'
+            : '更新しました。数分でサイトに反映されます ✓',
+          'ok'
+        );
+        if (mode === 'new') resetForm();
       } else {
         const err = await res.json();
         if (res.status === 422) setStatus('同名のファイルが既に存在します。ファイル名を変えてください。', 'ng');
@@ -253,12 +434,13 @@
     btn.disabled = false;
   }
 
-  // 起動
+  // --- 起動 ---
+
   const t = today();
   document.getElementById('date').value = t;
   document.getElementById('filename').value = filenameFromDate(t);
   document.getElementById('date').addEventListener('change', e => {
-    document.getElementById('filename').value = filenameFromDate(e.target.value);
+    if (mode === 'new') document.getElementById('filename').value = filenameFromDate(e.target.value);
   });
 
   localStorage.getItem('gh_token') ? showEditor() : showSetup();
