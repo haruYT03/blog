@@ -100,15 +100,15 @@
     .cs-details summary::-webkit-details-marker { display: none; }
     .cs-panel {
       display: none;
-      position: absolute;
-      top: calc(100% + 6px);
-      right: 0;
+      position: fixed;
+      top: 48px;
+      right: 24px;
       background: #fff;
       border: 1px solid #eee;
       border-radius: 6px;
       padding: 14px 16px;
       z-index: 100;
-      min-width: 340px;
+      min-width: 300px;
       box-shadow: 0 4px 16px rgba(0,0,0,0.07);
     }
     .cs-details[open] .cs-panel { display: block; }
@@ -116,7 +116,6 @@
     .cs-panel td { padding: 6px 8px; border-bottom: 1px solid #f4f4f4; vertical-align: top; }
     .cs-panel td:first-child { color: #aaa; white-space: nowrap; width: 1%; padding-right: 14px; }
     .cs-panel tr:last-child td { border-bottom: none; }
-    .cs-section { font-size: 0.72rem; color: #ccc; padding: 10px 8px 2px; letter-spacing: 0.05em; }
 
     /* Zen モード */
     .editor-wrap.zen {
@@ -224,15 +223,12 @@
         <summary class="tool-btn">?</summary>
         <div class="cs-panel">
           <table>
-            <tr><td colspan="2" class="cs-section">テキスト</td></tr>
             <tr><td><code>**太字**</code></td><td><strong>太字</strong></td></tr>
             <tr><td><code>## 見出し</code></td><td>大きい見出し（<code>###</code> で中）</td></tr>
             <tr><td><code>[文字](URL)</code></td><td>リンク</td></tr>
-            <tr><td colspan="2" class="cs-section">画像</td></tr>
-            <tr><td><code>![](URL)</code></td><td>画像を表示。GyazoはURLをコピーで得た <code>https://i.gyazo.com/…</code> を使う</td></tr>
-            <tr><td colspan="2" class="cs-section">改行</td></tr>
-            <tr><td>空行を1行</td><td>段落が変わる（間が広がる）</td></tr>
-            <tr><td>行末スペース2つ</td><td>段落は変えずに改行だけ</td></tr>
+            <tr><td><code>![](URL)</code></td><td>画像</td></tr>
+            <tr><td>空行を1行</td><td>段落が変わる</td></tr>
+            <tr><td>行末スペース2つ</td><td>改行のみ</td></tr>
           </table>
         </div>
       </details>
