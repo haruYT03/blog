@@ -127,6 +127,23 @@
       padding: 48px max(24px, calc((100vw - 760px) / 2)) 40px;
     }
     .editor-wrap.zen .textarea-toolbar { display: none; }
+    .zen-close {
+      display: none;
+      position: fixed;
+      top: 14px;
+      right: 18px;
+      z-index: 201;
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: 1.2rem;
+      color: #ddd;
+      cursor: pointer;
+      padding: 4px 8px;
+      line-height: 1;
+    }
+    .zen-close:hover { color: #999; }
+    .zen-close.on { display: block; }
     .editor-wrap.zen textarea {
       width: 100%;
       height: calc(100vh - 88px);
@@ -200,6 +217,7 @@
 
   <a id="view-link" href="#" target="_blank" rel="noopener">公開ページでこの記事を見る →</a>
 
+  <button class="zen-close" onclick="toggleZen()">×</button>
   <div class="editor-wrap" id="editor-wrap">
     <div class="textarea-toolbar">
       <details class="cs-details" id="cs-details">
@@ -429,9 +447,9 @@
   function toggleZen() {
     const wrap = document.getElementById('editor-wrap');
     const on = wrap.classList.toggle('zen');
+    document.querySelector('.zen-close').classList.toggle('on', on);
     if (on) {
       document.getElementById('content').focus();
-      // チートシートが開いていたら閉じる
       document.getElementById('cs-details').removeAttribute('open');
     }
   }
