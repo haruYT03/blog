@@ -78,6 +78,20 @@ function copyAnchor(id) {
         alert("copied: " + url);
     });
 }
+
+// 日付を3回タップ/クリックで /new/ に飛ぶ
+document.querySelectorAll('.log-date').forEach(el => {
+    let clicks = 0, timer;
+    el.addEventListener('click', () => {
+        clicks++;
+        clearTimeout(timer);
+        timer = setTimeout(() => { clicks = 0; }, 600);
+        if (clicks >= 3) {
+            clicks = 0;
+            window.location.href = '{{ "new/" | absURL }}';
+        }
+    });
+});
 </script>
 
 {{- end }}
