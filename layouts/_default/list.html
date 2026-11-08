@@ -9,6 +9,12 @@
 {{- end }}
 {{- $paginator := .Paginate $pages }}
 
+{{ with .Site.Params.blogDescription }}
+<header class="site-banner">
+  <p class="site-banner-text">{{ . }}</p>
+</header>
+{{ end }}
+
 <div class="tag-menu-container">
   <details class="tag-details">
     <summary class="tag-summary">Tags</summary>

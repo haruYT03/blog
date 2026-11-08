@@ -271,3 +271,20 @@ body {
     content: "";
     margin-bottom: 0.5em;
 }
+
+/* --- ページ上部のヘッダーバナー --- */
+.site-banner {
+    max-width: 720px;
+    margin: 0 auto 28px;        /* 下に記事との間隔 */
+    background: #f6f6f4;        /* うっすら背景色 */
+    border: 1px solid #efefec;  /* ごく薄い枠線で区切る */
+    border-radius: 6px;
+    padding: 16px 24px;
+    text-align: center;
+}
+.site-banner-text {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #777;
+    line-height: 1.7;
+}

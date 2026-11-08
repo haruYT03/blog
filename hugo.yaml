@@ -7,6 +7,8 @@ params:
   defaultTheme: light  # 白背景固定
   ShowShareButtons: true
   ShowReadingTime: true
+  # ↓ ページ上部のヘッダーに出る説明文。ここを書き換えれば文言が変わります。空にすると非表示。
+  blogDescription: "主にインディーゲームのユニークなフィジカル版特典を紹介しています。"
 
 pagination:
   pagerSize: 300
