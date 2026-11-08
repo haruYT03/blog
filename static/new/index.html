@@ -78,6 +78,12 @@
     #view-link.on { display: inline-block; }
     #view-link:hover { color: #333; }
 
+    /* 投稿ボタンと削除ボタンの行 */
+    .action-row { display: flex; justify-content: space-between; align-items: center; margin-top: 24px; }
+    #delete-btn { display: none; }
+    #delete-btn.on { display: inline-block; }
+    #delete-btn:hover { color: #c0392b; }
+
     /* テキストエリア上部ツールバー */
     .textarea-toolbar {
       display: flex;
@@ -237,7 +243,10 @@
     <textarea id="content" placeholder="ここに書く"></textarea>
   </div>
 
-  <button class="btn" id="submit-btn" onclick="submit()" style="margin-top:24px">投稿する</button>
+  <div class="action-row">
+    <button class="btn" id="submit-btn" onclick="submit()">投稿する</button>
+    <button class="btn-ghost" id="delete-btn" onclick="deletePost()">この記事を削除</button>
+  </div>
   <div id="status" class="status"></div>
 </div>
 
@@ -330,14 +339,37 @@
     showEditor();
   }
 
+  // 記事を読み込んだ時だけ「公開ページで見る」と「削除」を出す
   function updateViewLink(filename) {
     const link = document.getElementById('view-link');
-    if (mode === 'edit' && filename) {
-      link.href = postUrl(filename);
-      link.classList.add('on');
-    } else {
-      link.classList.remove('on');
-    }
+    const loaded = mode === 'edit' && filename;
+    if (loaded) link.href = postUrl(filename);
+    link.classList.toggle('on', !!loaded);
+    document.getElementById('delete-btn').classList.toggle('on', !!loaded);
+  }
+
+  async function deletePost() {
+    const filename = document.getElementById('filename').value.trim();
+    if (!filename || !currentSHA) return;
+    if (!confirm(`「${filename}」を削除します。元に戻せません。よろしいですか？`)) return;
+
+    setStatus('削除中...');
+    try {
+      const res = await ghFetch(`contents/content/posts/${filename}.md`, {
+        method: 'DELETE',
+        body: JSON.stringify({ message: `delete post ${filename}`, sha: currentSHA, branch: 'main' }),
+      });
+      if (res.ok) {
+        currentSHA = null;
+        resetForm();
+        updateViewLink(null);
+        await fetchPostList();
+        setStatus('削除しました。数分でサイトから消えます ✓', 'ok');
+      } else {
+        const err = await res.json();
+        setStatus(`削除に失敗しました: ${err.message}`, 'ng');
+      }
+    } catch(e) { setStatus(`通信エラー: ${e.message}`, 'ng'); }
   }
 
   async function setMode(m) {
