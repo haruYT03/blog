@@ -7,8 +7,14 @@ params:
   defaultTheme: light  # 白背景固定
   ShowShareButtons: true
   ShowReadingTime: true
-  # ↓ ページ上部のヘッダーに出る説明文。ここを書き換えれば文言が変わります。空にすると非表示。
-  blogDescription: "主にインディーゲームのユニークなフィジカル版特典を紹介しています。"
+  # ↓ ページ上部のヘッダーに出る説明文。ここを書き換えれば文言が変わります（改行もそのまま反映）。空にすると非表示。
+  blogDescription: |-
+    主にインディーゲームのユニークなフィジカル版特典を紹介しています。
+    というつもりで作ったブログです。
+
+# 記事一覧（日付と書き出し）を index.json に書き出す。/new/ の編集リストで使う
+outputs:
+  home: ["HTML", "RSS", "JSON"]
 
 pagination:
   pagerSize: 300

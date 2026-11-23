@@ -11,7 +11,7 @@
 
 {{ with .Site.Params.blogDescription }}
 <header class="site-banner">
-  <p class="site-banner-text">{{ . }}</p>
+  <p class="site-banner-text">{{ . | htmlEscape | replaceRE "\n" "<br>" | safeHTML }}</p>
 </header>
 {{ end }}
 

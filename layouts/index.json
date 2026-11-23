@@ -1,0 +1,7 @@
+{{- /* /new/ の編集リスト用。記事ごとの ID・日付・書き出し */ -}}
+{{- $out := slice -}}
+{{- range where site.RegularPages "Section" "posts" -}}
+  {{- $snippet := .Plain | replaceRE `\s+` " " | strings.TrimSpace | truncate 40 "…" -}}
+  {{- $out = $out | append (dict "id" .File.TranslationBaseName "date" (.Date.Format "2006-01-02") "snippet" $snippet) -}}
+{{- end -}}
+{{- $out | jsonify -}}

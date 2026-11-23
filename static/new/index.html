@@ -398,12 +398,17 @@
   async function fetchPostList() {
     const select = document.getElementById('post-select');
     select.innerHTML = '<option value="">-- 読み込み中... --</option>';
-    const res = await ghFetch('contents/content/posts');
+    // ファイル一覧はGitHub APIから（常に最新）、日付と書き出しはビルド時に出力した index.json から
+    const [res, info] = await Promise.all([ghFetch('contents/content/posts'), fetchPostIndex()]);
     if (!res.ok) { setStatus('一覧の取得に失敗しました', 'ng'); return; }
     const files = await res.json();
     const mds = files
       .filter(f => f.name.endsWith('.md'))
-      .map(f => { const name = f.name.replace('.md', ''); return { name, path: f.path, date: parseDateFromFilename(name) }; })
+      .map(f => {
+        const name = f.name.replace('.md', '');
+        const i = info[name];
+        return { name, path: f.path, date: i ? i.date : parseDateFromFilename(name), label: i ? i.snippet : name };
+      })
       .sort((a, b) => {
         if (a.date && b.date) return b.date.localeCompare(a.date);
         if (a.date) return -1; if (b.date) return 1;
@@ -413,9 +418,21 @@
     mds.forEach(f => {
       const opt = document.createElement('option');
       opt.value = f.path;
-      opt.textContent = f.date ? `${f.date}　${f.name}` : f.name;
+      opt.textContent = f.date ? `${f.date}　${f.label}` : f.label;
       select.appendChild(opt);
     });
+  }
+
+  // 投稿直後でまだ index.json に載っていない記事や、取得失敗時はファイル名で表示する
+  async function fetchPostIndex() {
+    try {
+      const res = await fetch(new URL('../index.json', location.href).href + '?t=' + Date.now());
+      if (!res.ok) return {};
+      const list = await res.json();
+      return Object.fromEntries(list.map(p => [p.id, p]));
+    } catch (e) {
+      return {};
+    }
   }
 
   async function loadPost() {
